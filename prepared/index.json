@@ -1,0 +1,94 @@
+{
+  "eula": "",
+  "vendor": "SAP",
+  "license": "",
+  "id": "sap.sac.customewidght.demo",
+  "version": "1.0.0",
+  "name": "CustomWidget Demo",
+  "newInstancePrefix": "CustomWidget_Demo",
+  "description": "A sample custom widget demo",
+  "webcomponents": [
+    {
+      "kind": "main",
+      "tag": "sac-customwidget-demo",
+      "url": "http://localhost:3000/echarts/prepared/main.js",
+      "integrity": "",
+      "ignoreIntegrity": true
+    }
+  ],
+  "properties": {
+		"width": {
+			"type": "integer",
+			"default": 600
+		},
+		"height": {
+			"type": "integer",
+			"default": 420
+		},
+    "seriesType": {
+      "type": "string",
+      "default": "bar",
+      "description": "Series type"
+    }
+  },
+  "methods": {
+    "setSeriesType": {
+      "description": "Set series type",
+      "parameters": [
+        {
+          "name": "type",
+          "type": "string",
+          "description": "Series type"
+        }
+      ]
+    },
+    "getSelectedDataPoint": {
+      "description": "Get selected data point",
+      "returnType": "EChartDataPoint"
+    }
+  },
+  "events": {
+    "onClick": {
+      "description": "Dispatch when user click a data point on eChart"
+    }
+  },
+  "types": {
+    "EChartDataPoint": {
+      "description": "EChart data point",
+      "properties": [
+        {
+          "name": "seriesName",
+          "type": "string",
+          "description": "series name (make sense when componentType is 'series')"
+        },
+        {
+          "name": "data",
+          "type": "number",
+          "description": "data value"
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "description": "data name, or category name"
+        }
+      ]
+    }
+  },
+
+  "dataBindings": {
+    "dataBinding": {
+      "feeds": [
+        {
+          "id": "dimensions",
+          "description": "Dimensions",
+          "type": "dimension"
+        },
+        {
+          "id": "measures",
+          "description": "Measures",
+          "type": "mainStructureMember"
+        }
+      ]
+    }
+  }
+}
