@@ -32,7 +32,7 @@ var getScriptPromisify = (src) => {
           this.render()
           //document.addEventListener('propertiesChanged', this.MapSettingChanged);
       }
-      var option;
+      
       async render() {
         //var ROOT_PATH = 'https://echarts.apache.org/examples';
        
@@ -44,8 +44,7 @@ var getScriptPromisify = (src) => {
         $.get('https://junling25.github.io/Widget/RegionMap/HK.json', function (geoJson)  {
           myChart.hideLoading();
           echarts.registerMap('HK', geoJson);
-          myChart.setOption(
-            (option = {
+          const option = {
               title: {
                 text: '地图测试',
                 subtext: 'Data from Wikipedia',
@@ -126,11 +125,9 @@ var getScriptPromisify = (src) => {
                   }
                 }
               ]
-              
-            })
-          );
+            };
         });
-        //eChart.setOption(option);
+        myChart.setOption(option);
       };
     }
   customElements.define('com-sac-sample-echarts-regionmap', Main)
