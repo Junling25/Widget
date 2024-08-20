@@ -41,8 +41,8 @@ var getScriptPromisify = (src) => {
 
         //var option;
         myChart.showLoading();
-        $.get('http://localhost:3000/beef_cuts_france.svg', function (svg)  {
-          //myChart.hideLoading();
+        $.get('https://junling25.github.io/Widget/RegionMap/HK.json', function (geoJson)  {
+          myChart.hideLoading();
           echarts.registerMap('HK', geoJson);
           myChart.setOption(
             (option = {
