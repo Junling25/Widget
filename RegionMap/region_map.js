@@ -32,14 +32,14 @@ var getScriptPromisify = (src) => {
           this.render()
           //document.addEventListener('propertiesChanged', this.MapSettingChanged);
       }
-      
+      var option;
       async render() {
         //var ROOT_PATH = 'https://echarts.apache.org/examples';
        
         await getScriptPromisify('https://cdn.bootcdn.net/ajax/libs/echarts/5.4.3/echarts.min.js')
         const myChart = echarts.init(this._root)
 
-        //var option;
+       
         myChart.showLoading();
         $.get('https://junling25.github.io/Widget/RegionMap/HK.json', function (geoJson)  {
           myChart.hideLoading();
