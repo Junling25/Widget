@@ -26,21 +26,30 @@ var getScriptPromisify = (src) => {
         this._eChart = null
         this._selectedDataPoint = {}
         this._props = {};
-  
-        this.render()
+        this._resultSet = null;  
+        //this.render()
       }
-      
+    set resultSet(rs) {
+      this._resultSet = rs;
+      this.render();
+    }
+    get resultSet() {
+      return this._resultSet;
+    }
     getSelectedDataPoint () {
-        return this._selectedDataPoint
-      }
+      return this._selectedDataPoint
+    }
   
     async render (resultSet) {
       await getScriptPromisify('https://cdn.jsdelivr.net/npm/echarts@5.5.1/dist/echarts.min.js')
-      //const eChart = this._eChart = echarts.init(this._root, 'main')
-      const eChart = echarts.init(this._root)
-        if (!resultSet || resultSet.length === 0) {
-          return;
-        }
+      if (this._eChart) {
+        this._eChart.dispose();
+      }
+      const eChart = this._eChart = echarts.init(this._root)
+      //const eChart = echarts.init(this._root)
+      //if (!resultSet || resultSet.length === 0) {
+      //    return;
+      //  }
         
       var length=resultSet.length;
       console.log('result',resultSet)
@@ -114,7 +123,9 @@ var getScriptPromisify = (src) => {
 
     dispose () {
       if (this._echart) {
-        echarts.dispose(this._echart);
+        //echarts.dispose(this._echart);
+        this._eChart.dispose();
+        this._eChart = null;
       }
     }
   }
