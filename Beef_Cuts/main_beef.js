@@ -87,7 +87,7 @@ var getScriptPromisify = (src) => {
               min:5,
               max:10000,
               orient: 'horizontal',
-              text: ['', 'Price'],
+              text: ['', '进口量'],
               realtime: true,
               calculable: true,
               inRange: {
