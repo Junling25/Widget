@@ -5,21 +5,6 @@ var getScriptPromisify = (src) => {
 }
 
 (function () {
-     const parseMetadata = metadata => {
-      const { dimensions: dimensionsMap, mainStructureMembers: measuresMap } = metadata
-      const dimensions = []           //dimension数组，key为类似dimension_0，用来读取data对应项
-      for (const key in dimensionsMap) {
-          const dimension = dimensionsMap[key]
-          dimensions.push({ key, ...dimension })
-      }
-      const measures = []             //mesaure数组，key为类似measure_0，用来读取data对应项
-      for (const key in measuresMap) {
-          const measure = measuresMap[key]
-          measures.push({ key, ...measure })
-      }
-      return { dimensions, measures, dimensionsMap, measuresMap }
-    }
-
   const template = document.createElement('template')
   template.innerHTML = `
           <style>
@@ -44,54 +29,45 @@ var getScriptPromisify = (src) => {
   
         this.render()
       }
-
-      set dataBinding (dataBinding) {
-        if (this._dataBinding !== dataBinding) {
-        this._dataBinding = dataBinding
-        this.render()
-        }
-      }
-
-      getSelectedDataPoint () {
+      
+    getSelectedDataPoint () {
         return this._selectedDataPoint
       }
   
-    async render () {
-      if (!this._dataBinding || this._dataBinding.state !== 'success') { return }
-      const { data, metadata } = this._dataBinding
-
-      if (!data || data.length === 0) {
-        return;
-      }
-      const { dimensions, measures } = parseMetadata(metadata)
-      // dimension         
-      const result= []
-      data.forEach(row => {
-        if (row['dimensions_0'] && row['dimensions_0'].label) {
-        const item = {
-          name: row['dimensions_0'].label,
-          value: [
-              row['measures_0'].raw.toFixed(2)
-          ]
-            };
-            result.push(item);
-         }
-        });
-
-        if (!result || result.length === 0) {
+    async render (resultSet) {
+      await getScriptPromisify('https://cdn.jsdelivr.net/npm/echarts@5.5.1/dist/echarts.min.js')
+      //const eChart = this._eChart = echarts.init(this._root, 'main')
+      const eChart = echarts.init(this._root)
+        if (!resultSet || resultSet.length === 0) {
           return;
         }
         
-      console.log('data',data)
-      console.log('result',result)
+      var length=resultSet.length;
+      console.log('result',resultSet)
+      //取数据并设置MAP需要的数组
+      const labels = [];
+      const values = [];
+      for (let i=0; i<length;i++){
+           let lab = resultSet[i]["ID_264y6h04q5"].description;
+           if (labels.indexOf(lab) === -1) {
+                labels.push(lab);
+              }
+           let val = Number(resultSet[i]["@MeasureDimension"].rawValue);
+              values.push(val); 
+          }
+        console.log("labels");
+        console.log(labels);
+        console.log(values);
         
-      await getScriptPromisify('https://cdn.jsdelivr.net/npm/echarts@5.5.1/dist/echarts.min.js')
+       const data = values.map((label, index) => ({ value: label, name: labels[index] }));
+       console.log(data);
+        
 
-        const eChart = this._eChart = echarts.init(this._root, 'main')
         //this._eChart.showLoading();
 
         $.get('https://junling25.github.io/Widget/RegionMap/beef_cuts_france.svg', (svg) =>{
           echarts.registerMap('beef_cuts_france', { svg: svg });
+
           const option = {
             tooltip: {},
             visualMap: {
@@ -121,7 +97,7 @@ var getScriptPromisify = (src) => {
                   }
                 },
                 selectedMode: false,
-                data: result,
+                data: data,
               }
             ]
           };
